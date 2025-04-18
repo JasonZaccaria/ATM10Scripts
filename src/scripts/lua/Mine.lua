@@ -1,5 +1,5 @@
 local minFuelLevel = 300
-local maintenance = { refuel = false, fullInventory = false }
+local maintenance = { refuel = false, fullInventory = false, stop = false }
 
 local function handleFuel()
     while turtle.getFuelLevel() < minFuelLevel do
@@ -115,12 +115,29 @@ local function mineLayer(width, length)
     layerReset(width, length)
 end
 
+local function checkStop()
+    rednet.open("left")
+    while true do
+        local command, content = rednet.receive()
+        if command == "stop" then
+            print("stopping after current iteration...")
+            maintenance.stop = true
+            rednet.close("left")
+            return
+        end
+    end
+end
+
 local function mine(width, length, depth, initPadding)
     for i = 1, initPadding do
         turtle.digDown()
         turtle.down()
     end
     for i = 1 + initPadding, depth do
+        if maintenance.stop then
+            print("Stopped")
+            return
+        end
         checkFuel()
         checkInventory()
         handleMaintenance(i)
@@ -132,4 +149,4 @@ local function mine(width, length, depth, initPadding)
     end
 end
 
-mine(12, 12, 64, 0)
+parallel.waitForAny(function() mine(12, 12, 64, 0) end, checkStop)
