@@ -135,6 +135,7 @@ local function mine(width, length, depth, initPadding)
     end
     for i = 1 + initPadding, depth do
         if maintenance.stop then
+            turtle.up()
             print("Stopped")
             return
         end
@@ -149,4 +150,4 @@ local function mine(width, length, depth, initPadding)
     end
 end
 
-parallel.waitForAny(function() mine(12, 12, 64, 0) end, checkStop)
+parallel.waitForAll(function() mine(12, 12, 64, 0) end, checkStop)
