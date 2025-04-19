@@ -7,19 +7,19 @@ local function main()
     end
     if arg[1] == "start" then
         rednet.broadcast({
-            command = "start"
+            command = "start",
             content = ""
         })
         rednet.close("right")
     elseif arg[1] == "stop" then
         rednet.broadcast({
-            command = "stop"
+            command = "stop",
             content = ""
         })
         rednet.close("right")
     elseif arg[1] == "update" then
         rednet.broadcast({
-            command = "update"
+            command = "update",
             content = "wget https://raw.githubusercontent.com/JasonZaccaria/ATM10Scripts/refs/heads/main/src/scripts/lua/Mine.lua"
         })
         rednet.close("right")

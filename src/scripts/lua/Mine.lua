@@ -118,8 +118,8 @@ end
 local function checkStop()
     rednet.open("left")
     while true do
-        local command, content = rednet.receive()
-        if command == "stop" then
+        local sendId, request = rednet.receive()
+        if request.command == "stop" then
             print("stopping after current iteration...")
             maintenance.stop = true
             rednet.close("left")

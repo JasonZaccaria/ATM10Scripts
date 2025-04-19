@@ -1,12 +1,12 @@
 local function mineServer()
     rednet.open("left")
     while true do
-        local command, content = rednet.receive()
-        if command == "start" then
+        local sendId, request = rednet.receive()
+        if request.command == "start" then
             shell.run("Mine.lua")
-        elseif command == "update" then
+        elseif request.command == "update" then
             shell.run("delete Mine.lua")
-            shell.run(content)
+            shell.run(command.content)
         end
     end
     rednet.close("left")
