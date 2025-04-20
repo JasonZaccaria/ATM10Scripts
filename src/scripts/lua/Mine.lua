@@ -1,5 +1,6 @@
 local minFuelLevel = 300
 local maintenance = { refuel = false, fullInventory = false, stop = false }
+local section = 1
 
 local function handleFuel()
     while turtle.getFuelLevel() < minFuelLevel do
@@ -27,11 +28,17 @@ local function handleMaintenance(currentIteration)
         end
         turtle.turnRight()
         turtle.turnRight()
+        for i = 1, (section - 1) * width do
+            turtle.forward()
+        end
         if maintenance.refuel then
             handleFuel()
         end
         if maintenance.fullInventory then
             handleInventory()
+        end
+        for i = 1, section * width do
+            turtle.back()
         end
         for i = 1, currentIteration - 1 do
             turtle.digDown()
@@ -128,26 +135,55 @@ local function checkStop()
     end
 end
 
-local function mine(width, length, depth, initPadding)
+local function mine(width, length, depth, initPadding, sectionBegin, sectionMax)
+    section = sectionBegin
+    minFuelLevel = minFuelLevel * sectionMax + 64
+    for i = 1, width * section do
+        if section ~= 1 then
+            turtle.dig()
+            turtle.forward()
+        end
+    end
     for i = 1, initPadding do
         turtle.digDown()
         turtle.down()
     end
-    for i = 1 + initPadding, depth do
-        if maintenance.stop then
-            turtle.up()
-            print("Stopped")
-            return
+    for k = 1, sectionMax do
+        for i = 1 + initPadding, depth do
+            if maintenance.stop then
+                for j = 1, i + initPadding - 1 do
+                    turtle.up()
+                end
+                for j = 1, width * section do
+                    if section ~= 1 then
+                        turtle.back()
+                    end
+                end
+                print("Stopped")
+                return
+            end
+            checkFuel()
+            checkInventory()
+            handleMaintenance(i)
+            mineLayer(width, length)
+            turtle.down()
         end
-        checkFuel()
-        checkInventory()
-        handleMaintenance(i)
-        mineLayer(width, length)
-        turtle.down()
+        for i = 1, depth do
+            turtle.up()
+        end
+        section = section + 1
+        if k ~= sectionMax then
+            for i = 1, width * (section - 1) do
+                turtle.dig()
+                turtle.forward()
+            end
+        end
     end
-    for i = 1, depth do
-        turtle.up()
+    for j = 1, width * (section - 2) do
+        if section ~= 1 then
+            turtle.back()
+        end
     end
 end
 
-parallel.waitForAll(function() mine(12, 12, 64, 0) end, checkStop)
+parallel.waitForAll(function() mine(12, 12, 64, 0, 1, 2) end, checkStop)
