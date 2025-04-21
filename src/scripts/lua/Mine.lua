@@ -154,7 +154,7 @@ local function mine(width, length, depth, initPadding, sectionBegin, sectionMax)
                 for j = 1, i + initPadding - 1 do
                     turtle.up()
                 end
-                for j = 1, width * section do
+                for j = 1, width * (section - 1) do
                     if section ~= 1 then
                         turtle.back()
                     end
