@@ -19,7 +19,7 @@ local function handleInventory()
     maintenance.fullInventory = false
 end
 
-local function handleMaintenance(currentIteration)
+local function handleMaintenance(currentIteration, width)
     if maintenance.refuel or maintenance.fullInventory then
         if currentIteration ~= i then
             for i = 1, currentIteration - 1 do
@@ -37,7 +37,7 @@ local function handleMaintenance(currentIteration)
         if maintenance.fullInventory then
             handleInventory()
         end
-        for i = 1, section * width do
+        for i = 1, (section - 1) * width do
             turtle.back()
         end
         for i = 1, currentIteration - 1 do
@@ -164,7 +164,7 @@ local function mine(width, length, depth, initPadding, sectionBegin, sectionMax)
             end
             checkFuel()
             checkInventory()
-            handleMaintenance(i)
+            handleMaintenance(i, width)
             mineLayer(width, length)
             turtle.down()
         end
@@ -173,7 +173,7 @@ local function mine(width, length, depth, initPadding, sectionBegin, sectionMax)
         end
         section = section + 1
         if k ~= sectionMax then
-            for i = 1, width * (section - 1) do
+            for i = 1, width do
                 turtle.dig()
                 turtle.forward()
             end
