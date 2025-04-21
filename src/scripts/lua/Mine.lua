@@ -138,7 +138,7 @@ end
 local function mine(width, length, depth, initPadding, sectionBegin, sectionMax)
     section = sectionBegin
     minFuelLevel = minFuelLevel * sectionMax + 64
-    for i = 1, width * section do
+    for i = 1, width * (section - 1) do
         if section ~= 1 then
             turtle.dig()
             turtle.forward()
