@@ -8,7 +8,7 @@ local function mineServer()
             shell.run("Mine.lua")
         elseif request.command == "update" then
             shell.run("delete Mine.lua")
-            shell.run(command.content)
+            shell.run(request.content)
         end
     end
     rednet.close("left")
