@@ -3,12 +3,26 @@ local maintenance = { refuel = false, fullInventory = false, stop = false }
 local section = 1
 
 local function handleFuel()
+    turtle.select(1)
+    turtle.drop()
+    turtle.select(2)
+    turtle.drop()
+
+    turtle.up()
+
+    turtle.select(1)
+    turtle.suck()
+    turtle.refuel()
+    turtle.select(2)
+    turtle.refuel()
+    turtle.select(1) --reset select just in case
     while turtle.getFuelLevel() < minFuelLevel do
         print("low fuel")
         turtle.select(1)
         turtle.refuel()
     end
     maintenance.refuel = false
+    turtle.down()
 end
 
 local function handleInventory()
