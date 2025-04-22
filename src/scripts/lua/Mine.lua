@@ -154,8 +154,14 @@ local function mine(width, length, depth, initPadding, sectionBegin, sectionMax)
         turtle.digDown()
         turtle.down()
     end
+    --for each section do... 
     for k = 1, sectionMax do
-        for i = 1 + initPadding, depth do
+        --for the padding + depth do...
+        modifiedDepth = 1 + initPadding
+        if k ~= 1 then
+            modifiedDepth = 1
+        end
+        for i = modifiedDepth, depth do
             if maintenance.stop then
                 for j = 1, i + initPadding - 1 do
                     turtle.up()
