@@ -1,4 +1,4 @@
-local minFuelLevel = 300
+local minFuelLevel = 400
 local maintenance = { refuel = false, fullInventory = false, stop = false }
 local section = 1
 
@@ -65,14 +65,6 @@ end
 
 local function checkFuel()
     if turtle.getFuelLevel() < minFuelLevel then
-        for i = 1, 16 do
-            turtle.select(i)
-            turtle.refuel()
-        end
-        if turtle.getFuelLevel() > minFuelLevel then
-            print("self refueled")
-            return
-        end
         maintenance.refuel = true
     end
     maintenance.refuel = false
